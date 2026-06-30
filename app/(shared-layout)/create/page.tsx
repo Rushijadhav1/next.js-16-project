@@ -16,6 +16,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@base-ui/react/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 // import { useRouter } from "next/navigation";
@@ -32,6 +33,7 @@ export default function CreateRoute() {
     defaultValues: {
       content: "",
       title: "",
+      image: undefined,
     },
   });
 
@@ -90,6 +92,28 @@ export default function CreateRoute() {
                       aria-invalid={fieldState.invalid}
                       placeholder="super cool blog content"
                       {...field}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+               <Controller
+                name="image"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel>Image</FieldLabel>
+                    <Input
+                      aria-invalid={fieldState.invalid}
+                      placeholder="super cool blog content"
+                      type="file"
+                      accept="image/*"
+                      onChange={(event)=> {
+                        const file = event.target.files?.[0];
+                        field.onChange(file);
+                      }}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />

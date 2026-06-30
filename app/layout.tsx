@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Suspense } from "react";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ConvexClientProvider } from "@/components/web/ConvexClientProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -40,10 +41,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-       <main className="max-w-7xl mx-auto w-full px-4 md:px-6 lg:px-8">
-        
-        <ConvexClientProvider>{children}</ConvexClientProvider>
-      </main>
+        <main className="max-w-7xl mx-auto w-full px-4 md:px-6 lg:px-8">
+         <Suspense fallback={null}>
+           <ConvexClientProvider>{children}</ConvexClientProvider>
+         </Suspense>
+       </main>
       <Toaster richColors/>
       </ThemeProvider>
       </body>

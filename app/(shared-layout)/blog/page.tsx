@@ -4,10 +4,19 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
+import { Metadata } from "next";
 
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+
+
+export const metadata: Metadata = {
+  title: 'My Blog',
+  description: 'Read over latest articales and insights',
+  category: 'Web devlopment',
+  authors:  [{name: 'Rushikesh jadhav'}]
+}
 
 export default function BlogPage() {
   return (
@@ -27,7 +36,8 @@ export default function BlogPage() {
 
 
 async function LoadBlogList(){
-    await new Promise((resolve) => setTimeout(resolve,2000));
+
+    "use cache"
     const data = await fetchQuery(api.posts.getPosts);
 
     return(
@@ -36,10 +46,13 @@ async function LoadBlogList(){
             <Card key={post._id} className="pt-0">
                 <div className="relative h-48 w-full overflow-hidden">
                     <Image 
-                       src="https://i.pinimg.com/1200x/17/a3/9b/17a39b21fa1c6bf03aac4dfd17691fa6.jpg" alt="image" 
+                        src={post.imageUrl ?? "https://i.pinimg.com/1200x/17/a3/9b/17a39b21fa1c6bf03aac4dfd17691fa6.jpg"} alt="image" 
                        fill
-                       className="rounded-t-lg"
-                      />
+                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                       loading="eager"
+                       priority
+                       className="rounded-t-lg object-cover"
+                       />
                 </div>
                 <CardContent>
                     <Link href={`/blog/${post._id}`}>
