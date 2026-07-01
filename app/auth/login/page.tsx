@@ -79,7 +79,7 @@ export default function LoginPage() {
                   <FieldLabel>Email</FieldLabel>
                   <input
                     type="email"
-                    placeholder="rushi@gmail.com"
+                    placeholder="Enter Mail"
                     aria-invalid={fieldState.invalid}
                     {...field}
                   />
@@ -99,7 +99,7 @@ export default function LoginPage() {
                   <FieldLabel>Password</FieldLabel>
                   <input
                     type="password"
-                    placeholder="********"
+                    placeholder="Enter Password"
                     aria-invalid={fieldState.invalid}
                     {...field}
                   />
