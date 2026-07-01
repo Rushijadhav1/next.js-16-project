@@ -47,6 +47,24 @@ async function LoadBlogList(){
 
     const data = await fetchQuery(api.posts.getPosts);
 
+    if (!data || data.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed py-20 text-center">
+          <h2 className="text-2xl font-bold">No posts yet</h2>
+          <p className="mt-2 max-w-md text-muted-foreground">
+            Be the first to share your thoughts! Create a post and it will show up here.
+          </p>
+          <Link
+            href="/create"
+            prefetch={false}
+            className={buttonVariants({ size: "lg", className: "mt-6" })}
+          >
+            Create Your First Post
+          </Link>
+        </div>
+      );
+    }
+
     return(
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
          {data?.map((post) =>(
