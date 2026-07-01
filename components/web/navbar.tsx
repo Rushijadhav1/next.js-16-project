@@ -23,10 +23,18 @@ export default function Navbar() {
           <Link className={buttonVariants({ variant: "ghost" })} href="/">
             Home
           </Link>
-          <Link className={buttonVariants({ variant: "ghost" })} href="/blog">
+          <Link
+            className={buttonVariants({ variant: "ghost" })}
+            href="/blog"
+            prefetch={false}
+          >
             Blog
           </Link>
-          <Link className={buttonVariants({ variant: "ghost" })} href="/create">
+          <Link
+            className={buttonVariants({ variant: "ghost" })}
+            href="/create"
+            prefetch={false}
+          >
             Create
           </Link>
         </div>

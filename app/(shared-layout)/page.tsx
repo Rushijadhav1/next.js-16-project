@@ -33,6 +33,7 @@ export default function HomePage() {
           <div className="flex flex-col items-center justify-center gap-3 pt-4 sm:flex-row">
             <Link
               href="/blog"
+              prefetch={false}
               className={buttonVariants({ size: "lg" })}
             >
               Explore Blogs
@@ -40,6 +41,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/create"
+              prefetch={false}
               className={buttonVariants({ variant: "outline", size: "lg" })}
             >
               Write a Post
@@ -72,6 +74,7 @@ export default function HomePage() {
             <CardContent>
               <Link
                 href="/blog"
+                prefetch={false}
                 className={buttonVariants({ variant: "link" })}
               >
                 Go to Blog
@@ -91,6 +94,7 @@ export default function HomePage() {
             <CardContent>
               <Link
                 href="/create"
+                prefetch={false}
                 className={buttonVariants({ variant: "link" })}
               >
                 Start Writing
@@ -110,6 +114,7 @@ export default function HomePage() {
             <CardContent>
               <Link
                 href="/blog"
+                prefetch={false}
                 className={buttonVariants({ variant: "link" })}
               >
                 Join the Community
