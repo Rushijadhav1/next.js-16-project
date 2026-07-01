@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "10mb",
     },
   },
-  cacheComponents: true,
   images: {
     remotePatterns: [
       {
@@ -17,6 +16,11 @@ const nextConfig: NextConfig = {
       {
         hostname: "superb-cuttlefish-666.convex.cloud",
         protocol: 'https',
+        port: "",
+      },
+      {
+        hostname: "hearty-reindeer-11.convex.cloud",
+        protocol: "https",
         port: "",
       }
     ],

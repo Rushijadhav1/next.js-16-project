@@ -44,7 +44,7 @@ export default function SignUpPage() {
         fetchOptions: {
           onSuccess: () => {
             toast.success("Account Created Successfully");
-            router.push("/");
+            router.push("/auth/login");
           },
           onError: (error) => {
             toast.error(error.error.message);
