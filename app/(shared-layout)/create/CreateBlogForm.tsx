@@ -1,6 +1,6 @@
 "use client";
-import { createBlogAction } from "@/app/actions";
-import { postSchema } from "@/app/schemas/blog";
+import { createBlogAction, updateBlogAction } from "@/app/actions";
+import { postSchema, editPostSchema, CATEGORIES } from "@/app/schemas/blog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,24 +23,50 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
+import { Id } from "@/convex/_generated/dataModel";
 
-export default function CreateBlogForm() {
+interface InitialPostData {
+  _id: Id<"posts">;
+  title: string;
+  body: string;
+  category?: string;
+}
+
+interface CreateBlogFormProps {
+  mode?: "create" | "edit";
+  initialData?: InitialPostData;
+}
+
+export default function CreateBlogForm({
+  mode = "create",
+  initialData,
+}: CreateBlogFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  const isEditMode = mode === "edit" && initialData;
+
   const form = useForm({
-    resolver: zodResolver(postSchema),
+    resolver: zodResolver(isEditMode ? editPostSchema : postSchema),
     defaultValues: {
-      content: "",
-      title: "",
+      content: initialData?.body ?? "",
+      title: initialData?.title ?? "",
       image: undefined,
+      category: initialData?.category ?? "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof postSchema>) {
+  function onSubmit(values: z.infer<typeof editPostSchema>) {
     startTransition(async () => {
-      await createBlogAction(values);
-      router.push("/blog");
+      if (isEditMode) {
+        const result = await updateBlogAction(initialData!._id, values);
+        if (result?.error) {
+          return;
+        }
+      } else {
+        await createBlogAction(values as z.infer<typeof postSchema>);
+        router.push("/blog");
+      }
     });
   }
 
@@ -48,16 +74,18 @@ export default function CreateBlogForm() {
     <div className="py-10">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
-          Create Post
+          {isEditMode ? "Edit Post" : "Create Post"}
         </h1>
         <p className="text-xl text-muted-foreground pt-4">
-          Share Your Thoughts With The Big World
+          {isEditMode ? "Update Your Thoughts" : "Share Your Thoughts With The Big World"}
         </p>
       </div>
       <Card className="w-full max-w-xl mx-auto">
         <CardHeader>
-          <CardTitle>Create Blog Article</CardTitle>
-          <CardDescription>Create a new blog artical</CardDescription>
+          <CardTitle>{isEditMode ? "Edit Blog Article" : "Create Blog Article"}</CardTitle>
+          <CardDescription>
+            {isEditMode ? "Update your blog article" : "Create a new blog article"}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -97,11 +125,40 @@ export default function CreateBlogForm() {
                 )}
               />
               <Controller
+                name="category"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel>Category</FieldLabel>
+                    <select
+                      aria-invalid={fieldState.invalid}
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value || undefined)}
+                    >
+                      <option value="">Select a category (optional)</option>
+                      {CATEGORIES.map((cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                    </select>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
                 name="image"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field>
-                    <FieldLabel>Image</FieldLabel>
+                    <FieldLabel>
+                      {isEditMode
+                        ? "New Image (leave empty to keep current)"
+                        : "Image"}
+                    </FieldLabel>
                     <Input
                       aria-invalid={fieldState.invalid}
                       placeholder="super cool blog content"
@@ -125,7 +182,7 @@ export default function CreateBlogForm() {
                     <span>Loading...</span>
                   </>
                 ) : (
-                  <span>Create Post</span>
+                  <span>{isEditMode ? "Update Post" : "Create Post"}</span>
                 )}
               </Button>
             </FieldGroup>

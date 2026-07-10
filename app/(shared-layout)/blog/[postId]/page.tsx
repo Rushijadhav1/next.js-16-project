@@ -11,6 +11,8 @@ import { Metadata } from "next";
 import { PostPresence } from "@/components/web/PostPresence";
 import { getToken } from "@/lib/auth-server";
 import { redirect } from "next/navigation";
+import { LikeButton } from "@/components/web/LikeButton";
+import { BookmarkButton } from "@/components/web/BookmarkButton";
 
 
 interface PostIdRouteProps {
@@ -94,7 +96,16 @@ export default async function PostIdRoute({ params }: PostIdRouteProps) {
             Posted on:{" "}
             {new Date(post._creationTime).toLocaleDateString("en-US")}
           </p>
+          {post.category && (
+            <span className="rounded-full bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary">
+              {post.category}
+            </span>
+          )}
           {userId && <PostPresence roomId={post._id} userId={userId} />}
+        </div>
+        <div className="flex items-center gap-2">
+          <LikeButton postId={post._id} />
+          <BookmarkButton postId={post._id} />
         </div>
       </div>
 

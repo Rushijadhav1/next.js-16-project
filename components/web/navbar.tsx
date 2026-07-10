@@ -7,6 +7,13 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import SearchInput from "./SearchInput";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Bookmark, LayoutDashboard, LogOut, User } from "lucide-react";
 
 export default function Navbar() {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -46,23 +53,57 @@ export default function Navbar() {
         </div>
 
         {isLoading ? null : isAuthenticated ? (
-          <Button
-            onClick={() =>
-              authClient.signOut({
-                fetchOptions: {
-                  onSuccess: () => {
-                    toast.success("Logged out Successfully");
-                    router.push("/");
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button variant="outline" className="gap-1.5">
+                    <User className="size-4" />
+                    <span className="hidden sm:inline">Account</span>
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => router.push("/dashboard")}
+                >
+                  <LayoutDashboard className="size-4" />
+                  Dashboard
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => router.push("/bookmarks")}
+                >
+                  <Bookmark className="size-4" />
+                  Bookmarks
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => router.push("/profile/edit")}
+                >
+                  <User className="size-4" />
+                  Profile
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      toast.success("Logged out Successfully");
+                      router.push("/");
+                    },
+                    onError: (error) => {
+                      toast.error(error.error.message);
+                    },
                   },
-                  onError: (error) => {
-                    toast.error(error.error.message);
-                  },
-                },
-              })
-            }
-          >
-            Logout
-          </Button>
+                })
+              }
+            >
+              <LogOut className="size-4" />
+            </Button>
+          </div>
         ) : (
           <>
             <Link className={buttonVariants()} href="/auth/sign-up">
