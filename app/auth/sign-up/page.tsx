@@ -47,7 +47,7 @@ export default function SignUpPage() {
             router.push("/auth/login");
           },
           onError: (error) => {
-            toast.error(error.error.message);
+            toast.error(error?.error?.message ?? "Sign up failed");
           },
         },
       });
@@ -74,7 +74,7 @@ export default function SignUpPage() {
                     {...field}
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error ?? undefined]} />
                   )}
                 </Field>
               )}
@@ -92,7 +92,7 @@ export default function SignUpPage() {
                     {...field}
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error ?? undefined]} />
                   )}
                 </Field>
               )}
@@ -110,7 +110,7 @@ export default function SignUpPage() {
                     {...field}
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error ?? undefined]} />
                   )}
                 </Field>
               )}

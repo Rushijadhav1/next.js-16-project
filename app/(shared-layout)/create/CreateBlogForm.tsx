@@ -64,7 +64,12 @@ export default function CreateBlogForm({
           return;
         }
       } else {
-        await createBlogAction(values as z.infer<typeof postSchema>);
+        const result = await createBlogAction(
+          values as z.infer<typeof postSchema>
+        );
+        if (result?.error) {
+          return;
+        }
         router.push("/blog");
       }
     });
@@ -102,7 +107,7 @@ export default function CreateBlogForm({
                       {...field}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[fieldState.error ?? undefined]} />
                     )}
                   </Field>
                 )}
@@ -119,7 +124,7 @@ export default function CreateBlogForm({
                       {...field}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[fieldState.error ?? undefined]} />
                     )}
                   </Field>
                 )}
@@ -144,7 +149,7 @@ export default function CreateBlogForm({
                       ))}
                     </select>
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[fieldState.error ?? undefined]} />
                     )}
                   </Field>
                 )}
@@ -170,7 +175,7 @@ export default function CreateBlogForm({
                       }}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[fieldState.error ?? undefined]} />
                     )}
                   </Field>
                 )}

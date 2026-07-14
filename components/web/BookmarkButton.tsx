@@ -5,6 +5,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { Bookmark, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
 
 interface BookmarkButtonProps {
   postId: Id<"posts">;
@@ -27,7 +28,11 @@ export function BookmarkButton({ postId }: BookmarkButtonProps) {
       variant={bookmarkData.bookmarked ? "default" : "outline"}
       size="sm"
       onClick={() => {
-        void toggleBookmark({ postId });
+        void toggleBookmark({ postId }).catch((err: unknown) => {
+          const message =
+            err instanceof Error ? err.message : "Failed to toggle bookmark";
+          toast.error(message);
+        });
       }}
     >
       <Bookmark

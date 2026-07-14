@@ -18,6 +18,11 @@ export async function createBlogAction(values: z.infer<typeof postSchema>) {
         }
 
         const token = await getToken();
+        if (!token) {
+            return {
+                error: "Not authenticated",
+            };
+        }
 
         const imageUrl = await fetchMutation(
             api.posts.generateImageUploadUrl,

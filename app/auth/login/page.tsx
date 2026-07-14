@@ -48,7 +48,7 @@ export default function LoginPage() {
           router.refresh();
         },
         onError: (error) => {
-          toast.error(error.error.message);
+          toast.error(error?.error?.message ?? "Login failed");
         },
       },
     });
@@ -86,7 +86,7 @@ export default function LoginPage() {
                   />
 
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error ?? undefined]} />
                   )}
                 </Field>
               )}
@@ -106,7 +106,7 @@ export default function LoginPage() {
                   />
 
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[fieldState.error ?? undefined]} />
                   )}
                 </Field>
               )}

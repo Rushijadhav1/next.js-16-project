@@ -36,14 +36,16 @@ export function CommentSection(props: {
     },
   });
 
-  function onSubmit(data: z.infer<typeof commentSchema>) {
+  function onSubmit(values: z.infer<typeof commentSchema>) {
     startTransition(async () => {
       try {
-        await createComment(data);
+        await createComment(values);
         form.reset();
         toast.success("Comment posted");
-      } catch {
-        toast.error("failed to create post");
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Failed to create comment";
+        toast.error(message);
       }
     });
   }
@@ -64,14 +66,14 @@ export function CommentSection(props: {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field>
-                <FieldLabel>Full Name</FieldLabel>
+                <FieldLabel>Comment</FieldLabel>
                 <Textarea
                   aria-invalid={fieldState.invalid}
                   placeholder="Share your thoughts"
                   {...field}
                 />
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError errors={[fieldState.error ?? undefined]} />
                 )}
               </Field>
             )}
@@ -102,7 +104,7 @@ export function CommentSection(props: {
                          />
                       </Avatar>
                       <div className="flex-1 space-y-1">
-                          <div className="flex item-center justify-between">
+                      <div className="flex items-center justify-between">
                             <p className="font-semibold text-sm">
                                 {comment.autherName}
                             </p>

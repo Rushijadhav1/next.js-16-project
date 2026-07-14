@@ -50,14 +50,16 @@ export function ProfileEditForm({ initialName }: ProfileEditFormProps) {
         });
 
         if (error) {
-          throw new Error(error.message);
+          throw new Error(error?.message ?? "Update failed");
         }
 
         toast.success("Profile updated");
         router.push("/dashboard");
         router.refresh();
-      } catch {
-        toast.error("Failed to update profile");
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "Failed to update profile";
+        toast.error(message);
       }
     });
   }
@@ -92,7 +94,7 @@ export function ProfileEditForm({ initialName }: ProfileEditFormProps) {
                       {...field}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[fieldState.error ?? undefined]} />
                     )}
                   </Field>
                 )}

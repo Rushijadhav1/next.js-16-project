@@ -95,7 +95,7 @@ export default function Navbar() {
                       router.push("/");
                     },
                     onError: (error) => {
-                      toast.error(error.error.message);
+                      toast.error(error?.error?.message ?? "Logout failed");
                     },
                   },
                 })
