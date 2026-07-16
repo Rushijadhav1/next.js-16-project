@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel in-progress runs for the same ref when a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+
+    # Placeholder values only: `next build` inlines NEXT_PUBLIC_* vars at compile
+    # time, so the keys must exist. Real secrets are still configured at deploy time.
+    env:
+      NEXT_PUBLIC_CONVEX_URL: https://placeholder.convex.cloud
+      NEXT_PUBLIC_CONVEX_SITE_URL: https://placeholder.convex.cloud
+      NEXT_PUBLIC_BETTER_AUTH_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: ci-placeholder-secret
+      SITE_URL: http://localhost:3000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+
+      - run: pnpm build

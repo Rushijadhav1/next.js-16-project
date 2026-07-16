@@ -8,7 +8,7 @@ export const getCommentsByPost = query({
     },
     handler: async (ctx, args) => {
         const data = await ctx.db.query('comments')
-        .filter((q) => q.eq(q.field('postId'), args.postId))
+        .withIndex("by_post", (q) => q.eq("postId", args.postId))
         .order("desc")
         .collect();
         
@@ -33,7 +33,7 @@ export const createComment = mutation({
         postId: args.postId,
         body: args.body,
         authorId:user._id,
-        autherName: user.name,
+        authorName: user.name,
      })
     }
 })

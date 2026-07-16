@@ -303,7 +303,7 @@ export const deletePost = mutation({
 
     const comments = await ctx.db
       .query("comments")
-      .filter((q) => q.eq(q.field("postId"), args.postId))
+      .withIndex("by_post", (q) => q.eq("postId", args.postId))
       .collect();
 
     await Promise.all(comments.map((comment) => ctx.db.delete(comment._id)));

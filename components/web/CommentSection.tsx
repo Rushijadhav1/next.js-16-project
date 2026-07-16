@@ -99,14 +99,14 @@ export function CommentSection(props: {
                 <div key={comment._id} className="flex gap-4">
                       <Avatar className="size-10 shrink-0">
                          <AvatarImage 
-                         src={`https://avatar.vercel.sh/${comment.autherName}`}
-                         alt={comment.autherName.slice(0, 2).toUpperCase()}
+                         src={`https://avatar.vercel.sh/${comment.authorName}`}
+                         alt={comment.authorName.slice(0, 2).toUpperCase()}
                          />
                       </Avatar>
                       <div className="flex-1 space-y-1">
                       <div className="flex items-center justify-between">
                             <p className="font-semibold text-sm">
-                                {comment.autherName}
+                                {comment.authorName}
                             </p>
                             <p className="text-muted-foreground text-xs">
                                 {new Date(comment._creationTime).toLocaleDateString("en-US")}
